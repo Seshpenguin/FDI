@@ -3,6 +3,8 @@
  */
  
 var net = require('net');
+var command = '';
+var counter = 0;
 
 var client = new net.Socket();
 client.connect(36000, 'internal.estinet.net', function(){
@@ -15,9 +17,12 @@ client.on('error', function(error){
 	console.log('There was an error establshing a connection to ClioteSky.');
 });
 client.on('data', function(data){
-	
-	console.log(data);
-	console.log('hmm')
+	command = command.concat(data);
+	counter++
+	if(counter == 2){
+		console.log(command);
+	}
+	//console.log('hmm')
 	/*console.log('Read:' + client.bytesRead);
 	if(command == 'rror 101\n'){
 		console.log('I got a thing')
