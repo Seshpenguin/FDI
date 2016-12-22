@@ -112,10 +112,12 @@ discordClient.on('message', message => {
   if (message.content === 'ping') {
     message.reply('pong');
 	client.write('send all ping\n');
-	voiceChannel.connection.playFile('sound2.mp3');
   }else if (message.content === 'play2'){
 	  message.reply('playing 2');
 	  voiceChannel.connection.playFile('sound.mp3');
+  }else if(message.content === 'play1'){
+	  message.reply('playing 1');
+	  voiceChannel.connection.playFile('sound2.mp3');
   }
 });
 
