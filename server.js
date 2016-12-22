@@ -18,6 +18,8 @@ const discordClient = new Discord.Client();
 //Configuration
 var clioteName = 'FDI1234';
 var cliotePassword = '123';
+var music = ["sound.mp3", "sound2.mp3"]; //Music Files
+var fx = ["", ""]; //Sound FX files
 
 var client = new net.Socket();
 client.connect(36000, 'internal.estinet.net', function(){
@@ -84,7 +86,7 @@ client.on('data', function(data){
 			default:
 				console.log('Unknown command or not yet implemented command recived.')
 		}
-		command = ''; //Clear the command
+		command = ''; //Clear the command variable
 	}
 	
 });
@@ -104,20 +106,23 @@ discordClient.on('ready', () => {
    .then(connection => {
      console.log('playing');
      const dispatcher = connection.playFile('sound.mp3');
+	 //Music Bot code:
+
    })
    .catch(err => console.log(err));
 });
 
+//music debug commands
 discordClient.on('message', message => {
   if (message.content === 'ping') {
     message.reply('pong');
 	client.write('send all ping\n');
-  }else if (message.content === 'play2'){
-	  message.reply('playing 2');
-	  voiceChannel.connection.playFile('sound.mp3');
-  }else if(message.content === 'play1'){
-	  message.reply('playing 1');
-	  voiceChannel.connection.playFile('sound2.mp3');
+  }else if (message.content === 'play1'){
+	  message.reply('playing ' + music[0]);
+	  voiceChannel.connection.playFile(music[0]);
+  }else if(message.content === 'play2'){
+	  message.reply('playing ' + music[1]);
+	  voiceChannel.connection.playFile(music[1]);
   }
 });
 
