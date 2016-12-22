@@ -11,11 +11,8 @@ var counter = 0;
 var hasAuthenticated = false;
 
 //Discord Bot
-var Discord = require('discord.io');
-var bot = new Discord.Client({
-    token: "MjYxMTc4ODUzMjYxNzA1MjE3.CzyocA.euxtn4QHAspP-36YvGbgTtoA01s",
-    autorun: true
-});
+const Discord = require('discord.js');
+const discordClient = new Discord.Client();
 
 
 //Configuration
@@ -96,18 +93,34 @@ client.on('close', function() {
 });
 
 // discord bot
-bot.on('ready', function() {
-    console.log(bot.username + " - (" + bot.id + ")");
+var voiceChannel;
+discordClient.on('ready', () => {
+  console.log('I am ready!');
+  voiceChannel = discordClient.channels.filter(g => {
+    return g.type == 'voice' && g.name == 'FusionPlay';
+  }).first();
+
+  voiceChannel.join()
+   .then(connection => {
+     console.log('playing');
+     const dispatcher = connection.playFile('sound.mp3');
+   })
+   .catch(err => console.log(err));
 });
-bot.on('message', function(user, userID, channelID, message, event) {
-    if (message === "ping") {
-        bot.sendMessage({
-            to: channelID,
-            message: "pong"
-        });
-		client.write('send all ping\n');
-    }
+
+discordClient.on('message', message => {
+  if (message.content === 'ping') {
+    message.reply('pong');
+	client.write('send all ping\n');
+	voiceChannel.connection.playFile('sound2.mp3');
+  }else if (message.content === 'play2'){
+	  message.reply('playing 2');
+	  voiceChannel.connection.playFile('sound.mp3');
+  }
 });
+
+
+discordClient.login('MjYxMTc4ODUzMjYxNzA1MjE3.CzyocA.euxtn4QHAspP-36YvGbgTtoA01s');
 
 //functions
 

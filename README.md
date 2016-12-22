@@ -10,7 +10,9 @@ FDI is built on Node-ChakraCore (A fork of Node.js that uses ChakraCore instead 
 
 FDI communicates with the FusionPlay network using ClioteSky, the central communication server for EstiNet. This way FusionPlay can tell FDI to do something, like switch music.
 
-Discord.io is used to connect to the Discord Server. This is what actually send audio data and whatnot to Discord.
+Discord.js is used to connect to the Discord Server. This is what actually send audio data and whatnot to Discord.
+
+FFmpeg decodes the audio files.
 
 ##Can I use it?
 You can, but you probably don't want to. FDI is essentially proprietary software, being tightly intergrated into FusionPlay and ClioteSky, both custom pieces of software, written just for EstiNet.
