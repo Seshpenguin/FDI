@@ -34,7 +34,6 @@ client.connect(36000, 'internal.estinet.net', function(){
 	
 	console.log('Attempting to create Cliote...')
 	createCliote();
-	//client.write('WUT');
 
 	
 	// keep-alive
@@ -45,7 +44,7 @@ client.connect(36000, 'internal.estinet.net', function(){
 });
 client.on('error', function(error){
 	// could not establish a connection with cliotesky
-	console.log('There was an error establshing a connection to ClioteSky.');
+	console.log('There was an error with the connection to ClioteSky.');
 });
 client.on('data', function(data){
 	// This is where incoming data from cliotesky is handled.
@@ -67,6 +66,7 @@ client.on('data', function(data){
 			hasAuthenticated = true;
 		}*/
 		console.log(command);
+		//handle different cliotesky messages.
 		switch(command){
 			case 'error 100\n':
 				console.log('Command not recognized.');
@@ -80,6 +80,9 @@ client.on('data', function(data){
 				console.log('Cliote not yet authenticated.'); //Authenticate with cliotesky, we already registered.
 				console.log('Attemping to login as Cliote: ' + clioteName);
 				client.write('hello ' + clioteName + ' ' + cliotePassword + '\n');
+				break;
+			case 'alive\n':
+				console.log('Recived alive message.')
 				break;
 			default:
 				console.log('Unknown command or not yet implemented command recived.')
