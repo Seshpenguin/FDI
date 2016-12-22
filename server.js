@@ -10,6 +10,14 @@ var command = '';
 var counter = 0;
 var hasAuthenticated = false;
 
+//Discord Bot
+var Discord = require('discord.io');
+var bot = new Discord.Client({
+    token: "MjYxMTc4ODUzMjYxNzA1MjE3.CzyocA.euxtn4QHAspP-36YvGbgTtoA01s",
+    autorun: true
+});
+
+
 //Configuration
 var clioteName = 'FDI1234';
 var cliotePassword = '123';
@@ -24,17 +32,15 @@ client.connect(36000, 'internal.estinet.net', function(){
 	// make sure that our output is in utf-8 (aka a normal string), not a Buffer object.
 	client.setEncoding('utf-8');
 	
-	console.log('create')
+	console.log('Attempting to create Cliote...')
 	createCliote();
-	console.log('login');
-	login();
 	//client.write('WUT');
 
 	
 	// keep-alive
 	setInterval(function() {
-		console.log('Im alive!');
-		client.write('alive');
+		console.log('Sent alive message'); //Turn this off! Debug only.
+		client.write('alive\n');
 	}, 5000);
 });
 client.on('error', function(error){
@@ -47,11 +53,9 @@ client.on('data', function(data){
 	
 	// concat takes 2 varibles and add's their values together (in this case we append 'command' with 'data'.)
 	// we do this because of some weird glitch in the way data is sent (first character is sent in a packet, then the rest in another.)
-	//command = command.concat(data);
-	command = data;
-	counter++
-	console.log('raw:' + data)
-	if(counter == 2 || 1){
+	command = command.concat(data);
+	//command = data;
+	if(data.length > 1) {
 		//once we get the 2 packets of data, then we can do stuff with it.
 		/*if(hasAuthenticated == false){
 			console.log('Attempting to authenticate with ClioteSky');
@@ -65,35 +69,48 @@ client.on('data', function(data){
 		console.log(command);
 		switch(command){
 			case 'error 100\n':
-				console.log('Uhoh! Error 100 recived!');
+				console.log('Command not recognized.');
 				break;
 			case 'error 301\n':
-				console.log('Cliote name already registed.');
+				console.log('Cliote name already registed.'); //Authenticate with cliotesky, we already registered.
+				console.log('Attemping to login as Cliote: ' + clioteName);
+				client.write('hello ' + clioteName + ' ' + cliotePassword + '\n');
 				break;
+			case 'error 901\n':
+				console.log('Cliote not yet authenticated.'); //Authenticate with cliotesky, we already registered.
+				console.log('Attemping to login as Cliote: ' + clioteName);
+				client.write('hello ' + clioteName + ' ' + cliotePassword + '\n');
+				break;
+			default:
+				console.log('Unknown command or not yet implemented command recived.')
 		}
-		counter = 0;
+		command = ''; //Clear the command
 	}
-	//console.log('hmm')
-	/*console.log('Read:' + client.bytesRead);
-	if(command == 'rror 101\n'){
-		console.log('I got a thing')
-		client.write('Hai\n');
-	}*/
 	
 });
 client.on('close', function() {
 	console.log('Connection closed');
 });
 
+// discord bot
+bot.on('ready', function() {
+    console.log(bot.username + " - (" + bot.id + ")");
+});
+bot.on('message', function(user, userID, channelID, message, event) {
+    if (message === "ping") {
+        bot.sendMessage({
+            to: channelID,
+            message: "pong"
+        });
+		client.write('send all ping\n');
+    }
+});
 
+//functions
 
-function login(){
-	// first we try to login as a cliote
-	//client.write('hello ' + clioteName + ' ' + cliotePassword + '\n');
-}
 function createCliote(){
 	// if the cliote doesn't exsit, create it.
-	//client.write('create ' + clioteName + ' Default ' + cliotePassword + '\n');
-	client.write('hello ' + clioteName + ' ' + cliotePassword + '\n');
+	client.write('create ' + clioteName + ' Default ' + cliotePassword + '\n');
+	//client.write('hello ' + clioteName + ' ' + cliotePassword + '\n');
+	
 }
-function 
